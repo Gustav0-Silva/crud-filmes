@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -44,15 +45,15 @@ public class FilmeServiceTest {
         Assertions.assertEquals(filme,filmeRetorno);
     }
     @Test
-    public void buscaPorNomeTest(){
+    public void buscaPorGeneroTest(){
         Ator ator1 = Ator.builder()
-                .nomeAtor("Gustavinho")
-                .nacionalidade("Nigeriano")
+                .nomeAtor("Gustavo")
+                .nacionalidade("Colombiano")
                 .build();
 
         Ator ator2 = Ator.builder()
                 .nomeAtor("Marthina")
-                .nacionalidade("Camponesa")
+                .nacionalidade("Francesa")
                 .build();
 
         atorService.adicionaAtor(ator1);
@@ -76,33 +77,31 @@ public class FilmeServiceTest {
     @Test
     public void buscaPorAnoTest(){
         Ator ator1 = Ator.builder()
-                .nomeAtor("Gustavinho")
-                .nacionalidade("Nigeriano")
+                .nomeAtor("Gustavo")
+                .nacionalidade("Colombiano")
                 .build();
 
         Ator ator2 = Ator.builder()
                 .nomeAtor("Marthina")
-                .nacionalidade("Camponesa")
+                .nacionalidade("Francesa")
                 .build();
 
         atorService.adicionaAtor(ator1);
         atorService.adicionaAtor(ator2);
 
-        Filme filme1 = Filme.builder()
+        Filme filme = Filme.builder()
                 .nomeFilme("A espera de um milagre")
                 .anoLancamento(2004)
                 .listaAtores(List.of(ator1,ator2))
                 .genero("Drama")
                 .build();
 
-
-        filmesService.adicionaFilme(filme1);
+        filmesService.adicionaFilme(filme);
 
         List<Filme> retorno = filmesService.buscarPeloAno(2004);
 
-        Assertions.assertEquals(retorno.get(0).getNomeFilme(), filme1.getNomeFilme());
-        Assertions.assertEquals(retorno.get(0).getAnoLancamento(), filme1.getAnoLancamento());
+        Assertions.assertEquals(retorno.get(0).getNomeFilme(), filme.getNomeFilme());
+        Assertions.assertEquals(retorno.get(0).getAnoLancamento(), filme.getAnoLancamento());
     }
-
 
 }

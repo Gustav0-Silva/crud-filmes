@@ -57,8 +57,8 @@ public class FilmesControllerTest {
                 .postForEntity("http://localhost:" + port + "/filme",
                         filme, Filme.class);
 
-
         Assertions.assertEquals(respostaFilme.getStatusCode(), HttpStatus.NOT_IMPLEMENTED);
     }
+
 
 }

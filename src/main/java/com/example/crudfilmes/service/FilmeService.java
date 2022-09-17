@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -65,7 +66,7 @@ public class FilmeService {
         List<Filme> listaRetorno = new ArrayList<>();
 
         for (Filme filme : listaFilmes) {
-            if (filme.getAnoLancamento() == anoLancamento){
+            if (Objects.equals(filme.getAnoLancamento(), anoLancamento)){
                 listaRetorno.add(filme);
             }
         }
