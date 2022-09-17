@@ -1,9 +1,11 @@
 package com.example.crudfilmes.controller;
 
-import com.example.crudfilmes.domain.Atores;
+import com.example.crudfilmes.domain.Ator;
 import com.example.crudfilmes.domain.Filme;
-import com.example.crudfilmes.service.FilmesService;
+import com.example.crudfilmes.exception.InvalidoAnoException;
+import com.example.crudfilmes.service.AtorService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,43 +17,48 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FilmesControllerTest {
     @LocalServerPort
     private int port;
-
     @Autowired
     private TestRestTemplate testRestTemplate;
 
-
     @Test
-    public void inserePorApi(){
-        Atores ator1 = new Atores();
-        ator1.setNomeAtor("Emile Hirsch");
-        ator1.setNacionalidade("Americano");
+    @DisplayName("Deve adicionar o filme de maneira correta")
+    public void cadastraFilmeTest(){
 
-        Atores ator2 = new Atores();
-        ator2.setNomeAtor("Kristen Stewart");
-        ator2.setNacionalidade("Americana");
+        Filme filme = Filme.builder()
+                .nomeFilme("A espera de um milagre")
+                .anoLancamento(2004)
+                .genero("Drama")
+                .build();
 
-        List<Atores> listaAtores = new ArrayList<>();
-        listaAtores.add(ator1);
-        listaAtores.add(ator2);
+        ResponseEntity<Filme> respostaFilme = this.testRestTemplate
+                .postForEntity("http://localhost:" + port + "/filme",
+                        filme, Filme.class);
 
-        Filme filme = new Filme();
-        filme.setId(1L);
-        filme.setNomeFilme("Into The Wild");
-        filme.setGenero("Drama");
-        filme.setAnoLancamento(2007);
-        filme.setListaAtores(listaAtores);
+        Assertions.assertEquals(CREATED, respostaFilme.getStatusCode());
+        Assertions.assertEquals(filme.getNomeFilme(), respostaFilme.getBody().getNomeFilme());
+        Assertions.assertEquals(filme.getGenero(), respostaFilme.getBody().getGenero());
+        Assertions.assertEquals(filme.getAnoLancamento(), respostaFilme.getBody().getAnoLancamento());
+    }
+    @Test
+    public void exceptionAnoTest(){
+        Filme filme = Filme.builder()
+                .nomeFilme("A espera de um milagre")
+                .anoLancamento(2050)
+                .genero("Drama")
+                .build();
 
-        ResponseEntity<Filme> filmeResposta = this.testRestTemplate
-                .postForEntity("http://localhost:" + port + "/filmes",
+        ResponseEntity<Filme> respostaFilme = this.testRestTemplate
+                .postForEntity("http://localhost:" + port + "/filme",
                         filme, Filme.class);
 
 
-//        Filme filmeResposta = filmesService.adicionaFilme(filme);
-
-        Assertions.assertEquals(HttpStatus.CREATED, filmeResposta.getStatusCode());
+        Assertions.assertEquals(respostaFilme.getStatusCode(), HttpStatus.NOT_IMPLEMENTED);
     }
+
 }
