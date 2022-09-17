@@ -18,11 +18,13 @@ import java.util.Optional;
 @AllArgsConstructor
 public class FilmesService {
 
-    private FilmesRepository filmesRepository;
+    private final FilmesRepository filmesRepository;
 
 
     public Filme adicionaFilme(Filme filme) {
-        validaFilme(filme);
+        if (filme.getNomeFilme() == null){
+            throw new FilmeNomeException("Não se deve adicionar remedio sem nome");
+        }
         return filmesRepository.save(filme);
     }
 
@@ -34,7 +36,7 @@ public class FilmesService {
         if (filme.getGenero()==null || filme.getGenero().equals("")){
             throw new FilmeGeneroException("O filme não foi adicionado por não ter um gênero válido");
         }
-        if(filme.getAnoLancamento() <= 1984 || filme.getAnoLancamento() > LocalDate.now().getYear()){
+        if(filme.getAnoLancamento() <= 1984 || filme.getAnoLancamento() > 2022){
             throw new FilmeAnoException("O filme não foi adicionado por não ter um ano válido");
         }
         if(filme.getListaAtores().isEmpty()){

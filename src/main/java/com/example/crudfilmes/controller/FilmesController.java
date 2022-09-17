@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class FilmesController {
 
-    private FilmesService filmesService;
+    private final FilmesService filmesService;
 
     @PostMapping
     public ResponseEntity<Filme> adicionaFilme(@RequestBody Filme filme) {
         filmesService.adicionaFilme(filme);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(filme, HttpStatus.CREATED);
     }
 
-    @GetMapping ("/{buscaNome}")
-    public ResponseEntity<Filme> buscarNomeFilme (@PathVariable String nomeFilme){
-        Filme retorno = filmesService.buscarPeloNome(nomeFilme);
+    @GetMapping("/{buscarNome}")
+    public ResponseEntity<Filme> buscarNomeFilme (@PathVariable String buscarNome){
+        Filme retorno = filmesService.buscarPeloNome(buscarNome);
         return new ResponseEntity<>(retorno, HttpStatus.OK);
     }
 }
