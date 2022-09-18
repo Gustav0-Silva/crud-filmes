@@ -17,7 +17,6 @@ public class FilmeService {
 
     private final FilmeRepository filmeRepository;
 
-
     public Filme adicionaFilme(Filme filme) {
         validaFilme(filme);
         return filmeRepository.save(filme);

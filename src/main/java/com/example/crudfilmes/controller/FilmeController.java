@@ -18,8 +18,8 @@ public class FilmeController {
 
     @PostMapping
     public ResponseEntity<Filme> adicionaFilme(@RequestBody Filme filme) {
-        filmesService.adicionaFilme(filme);
-        return new ResponseEntity<>(filme, HttpStatus.CREATED);
+        Filme retorno = filmesService.adicionaFilme(filme);
+        return new ResponseEntity<>(retorno, HttpStatus.CREATED);
     }
 
     @GetMapping("/{buscarNome}")
